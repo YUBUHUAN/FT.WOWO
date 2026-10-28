@@ -1,5 +1,5 @@
 /* WowoPet service worker — app shell only, API is always live. */
-const CACHE = "wowo-shell-v4";
+const CACHE = "wowo-shell-v5";
 const ASSETS = [
   "/",
   "/index.html",
