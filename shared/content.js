@@ -6,7 +6,7 @@
   if (typeof module === "object" && module.exports) module.exports = factory();
   else root.WowoContent = factory();
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const VERSION = "1.0.0.0.1";
+  const VERSION = "1.6.0";
   const DEFAULT_NAME = "喔喔";
 
   const MOOD_LABELS = [
