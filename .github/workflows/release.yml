@@ -1,0 +1,116 @@
+name: build-and-release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows-portable:
+    runs-on: windows-latest
+    timeout-minutes: 50
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Provide bundled node.exe
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path desktop-native/node | Out-Null
+          $node = (Get-Command node).Source
+          Copy-Item $node desktop-native/node/node.exe -Force
+          dotnet --list-runtimes
+
+      - name: Build portable app
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-native.ps1
+
+      - name: Install NSIS
+        shell: pwsh
+        run: |
+          choco install nsis -y --no-progress
+
+      - name: Build Windows installer
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-installer.ps1
+
+      - name: Package portable zip
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "dist/WowoPet-Windows-Portable/*" -DestinationPath "WowoPet-Windows-Portable-v1.0.0.zip" -CompressionLevel Optimal
+          Get-Item "WowoPet-Windows-Portable-v1.0.0.zip", "dist/WowoPet-Setup-1.0.0.exe" | Select-Object Name, Length
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-package
+          path: |
+            WowoPet-Windows-Portable-v1.0.0.zip
+            dist/WowoPet-Setup-1.0.0.exe
+          retention-days: 7
+
+  release:
+    needs: windows-portable
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Windows package
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-package
+          path: release-assets
+
+      - name: List assets
+        run: find release-assets -type f -printf '%p %s\n' | sort
+
+      - name: Create draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete v1.0.0 --yes 2>/dev/null || true
+          gh release create v1.0.0 android/release/WowoPet-Android-1.0.0.apk \
+            --title "喔喔桌宠 v1.0.0" \
+            --notes "1.0.0：修复 PC 睡着后仍可投喂/运动、梦话未加载和台灯点击；手帐喂食/出游/运动/睡眠记录限制为最新几条并可滚动；新增睡眠记录；Windows 安装版、便携版、独立 Android APK。" \
+            --verify-tag --draft
+
+      - name: Upload Windows setup
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SETUP=$(find release-assets -name 'WowoPet-Setup-1.0.0.exe' -print -quit)
+          echo "setup=$SETUP"
+          gh release upload v1.0.0 "$SETUP" --clobber
+
+      - name: Upload portable zip
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ZIP=$(find release-assets -name 'WowoPet-Windows-Portable-v1.0.0.zip' -print -quit)
+          echo "zip=$ZIP"
+          gh release upload v1.0.0 "$ZIP" --clobber
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit v1.0.0 --draft=false

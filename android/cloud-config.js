@@ -1,0 +1,5 @@
+window.WOWO_CLOUD = {
+  url: "https://jvklkgrrzexqivwcvzeh.supabase.co",
+  key: "sb_publishable_fMbE3F9jjsLlh8_xoETopg_LFVyx9xa",
+  device: "android"
+};
