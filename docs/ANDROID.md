@@ -4,7 +4,7 @@
 
 ## APK
 
-- 文件：`dist/WowoPet-Android-1.6.0.apk`
+- 文件：`dist/WowoPet-Android-1.7.0.apk`
 - 包名：`com.wowo.app`
 - 最低 Android 7（API 24）
 - 首次安装需要允许“安装未知应用”
