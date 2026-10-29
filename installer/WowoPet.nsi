@@ -1,7 +1,7 @@
 Unicode true
 
 !define APP_NAME "喔喔桌宠"
-!define APP_VERSION "1.7.0.7"
+!define APP_VERSION "1.7.0.8"
 !define APP_PUBLISHER "WowoPet"
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\WowoPet"
 

@@ -1,6 +1,6 @@
 param(
   [string]$Portable = "dist\WowoPet-Windows-Portable",
-  [string]$Version = "1.7.0.7"
+  [string]$Version = "1.7.0.8"
 )
 
 $ErrorActionPreference = "Stop"
