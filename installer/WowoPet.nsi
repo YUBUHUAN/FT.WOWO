@@ -1,7 +1,7 @@
 Unicode true
 
 !define APP_NAME "喔喔桌宠"
-!define APP_VERSION "1.7.0.5"
+!define APP_VERSION "1.7.0.6"
 !define APP_PUBLISHER "WowoPet"
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\WowoPet"
 
@@ -30,7 +30,7 @@ BrandingText "${APP_NAME} ${APP_VERSION}"
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "SimpChinese"
 
-VIProductVersion "1.7.0.5.0"
+VIProductVersion "1.7.0.6.0"
 VIAddVersionKey "ProductName" "${APP_NAME}"
 VIAddVersionKey "ProductVersion" "${APP_VERSION}"
 VIAddVersionKey "CompanyName" "${APP_PUBLISHER}"

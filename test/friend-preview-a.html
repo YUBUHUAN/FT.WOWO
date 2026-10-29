@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>密友手帐 · A 排版预览</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#efe6da;font-family:"Microsoft YaHei UI","PingFang SC",sans-serif;color:#2b2730;display:flex;justify-content:center;padding:20px 0}
+  .phone{width:390px;min-height:844px;background:#fbf6ee;border-radius:30px;overflow:hidden;box-shadow:0 18px 50px rgba(40,32,46,.18);border:1px solid #e5d8c9}
+  .bar{display:flex;align-items:center;gap:12px;padding:18px 18px 12px}
+  .back{width:36px;height:36px;border-radius:50%;border:1.5px solid #2b2730;background:transparent;display:grid;place-items:center;font-size:20px;color:#2b2730}
+  .brand{flex:1}
+  .brand h1{margin:0;font-family:KaiTi,"STKaiti",serif;font-size:20px;font-weight:700}
+  .brand small{display:block;margin-top:3px;font-family:Georgia,serif;font-size:8px;letter-spacing:.2em;color:#a59a8d}
+  .bond{font-family:Georgia,serif;font-size:9px;letter-spacing:.14em;color:#8d8377;border:1px solid #d8cbbb;border-radius:999px;padding:6px 11px}
+  .content{padding:4px 18px 22px}
+  .card{background:#fffdf8;border:1px solid #e7dccd;border-radius:22px;padding:16px;box-shadow:0 7px 20px rgba(80,61,44,.06);margin-bottom:12px}
+  .friend-head{display:flex;align-items:center;gap:13px}
+  .friend-head img{width:62px;height:62px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 3px 10px rgba(60,40,50,.12)}
+  .friend-head .name{font-family:KaiTi,"STKaiti",serif;font-size:23px;line-height:1.1}
+  .friend-head .meta{font-size:10.5px;color:#8d8377;margin-top:5px}
+  .live{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9fb59a;margin-right:5px}
+  .code-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:15px;padding-top:12px;border-top:1px dashed #e3d6c6}
+  .code-row small{display:block;color:#a59a8d;font-size:9px;letter-spacing:.08em}
+  .code-row b{display:block;font-family:Georgia,serif;font-size:24px;letter-spacing:.06em;margin-top:4px}
+  .copy{border:1.5px solid #2b2730;background:transparent;color:#2b2730;border-radius:999px;padding:7px 13px;font-size:11px}
+  .section-title{display:flex;align-items:baseline;justify-content:space-between;margin:2px 2px 9px}
+  .section-title h2{margin:0;font-family:KaiTi,"STKaiti",serif;font-size:16px}
+  .section-title span{font-family:Georgia,serif;font-size:8px;color:#a59a8d;letter-spacing:.15em}
+  /* ticket */
+  .ticket{display:grid;grid-template-columns:1fr 112px;background:#fffdf8;border:1.5px solid #2b2730;border-radius:20px;overflow:hidden;box-shadow:0 7px 20px rgba(80,61,44,.08);margin-bottom:12px;position:relative}
+  .ticket-left{padding:14px 14px 13px;min-width:0}
+  .kicker{font-family:Georgia,serif;font-size:8px;letter-spacing:.16em;color:#9c8f80}
+  .ticket h3{margin:5px 0 3px;font-family:KaiTi,"STKaiti",serif;font-size:19px;line-height:1.15}
+  .ticket p{margin:0;font-size:10px;color:#8d8377}
+  .mini-art{height:42px;margin:10px 0 8px;border-radius:12px;background:linear-gradient(135deg,#e4efdc,#d7e7ef);position:relative;overflow:hidden}
+  .mini-art:before{content:"";position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);width:130px;height:65px;border-radius:50%;background:#a9c29f}
+  .mini-art:after{content:"";position:absolute;left:56%;bottom:15px;width:8px;height:27px;background:#8c6d55;border-radius:3px}
+  .mini-art i{position:absolute;left:56%;bottom:31px;width:42px;height:34px;border-radius:50% 50% 45% 45%;background:#7fa276;transform:translateX(-21px)}
+  .ticket-foot{display:flex;gap:6px;align-items:center}
+  .ticket-foot button{border:1px solid #d4c6b6;background:transparent;border-radius:999px;padding:5px 9px;font-size:9.5px;color:#5c5360}
+  .ticket-stub{border-left:1.5px dashed #cbbdad;padding:13px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f6ede2;position:relative}
+  .ticket-stub:before,.ticket-stub:after{content:"";position:absolute;left:-7px;width:13px;height:13px;border-radius:50%;background:#fbf6ee;border:1.5px solid #2b2730}
+  .ticket-stub:before{top:-8px}.ticket-stub:after{bottom:-8px}
+  .ticket-stub small{font-size:8px;letter-spacing:.1em;color:#9c8f80}
+  .ticket-stub b{font-family:Georgia,serif;font-size:25px;line-height:1;margin:8px 0 10px;letter-spacing:.02em}
+  .ticket-stub button{border:1px solid #2b2730;background:#2b2730;color:#fffdf8;border-radius:999px;padding:5px 8px;font-size:9px}
+  /* actions */
+  .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .action{background:#fffdf8;border:1px solid #e7dccd;border-radius:16px;padding:10px 8px 9px;text-align:center;box-shadow:0 5px 14px rgba(80,61,44,.05)}
+  .action .art{height:52px;border-radius:11px;display:grid;place-items:center;position:relative;overflow:hidden;margin-bottom:7px}
+  .action.feed .art{background:#f9e8dc}
+  .action.out .art{background:#e4efdc}
+  .action.sport .art{background:#e2edf3}
+  .action .art img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+  .action .label{font-family:KaiTi,"STKaiti",serif;font-size:13px}
+  .action .hint{font-size:8px;color:#a59a8d;margin-top:2px}
+  .plate{position:absolute;right:10px;bottom:8px;width:30px;height:30px;border-radius:50%;border:4px solid #dcae9a;background:#fff8ef}
+  .shuttle{position:absolute;right:12px;bottom:8px;width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:30px solid #fffaf0;filter:drop-shadow(0 2px 0 #acb8ad)}
+  .pending{border-radius:14px;background:#f6ede2;padding:10px 12px;font-size:10px;color:#6b6170;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}
+  .pending button{border:0;background:#2b2730;color:#fffdf8;border-radius:999px;padding:5px 9px;font-size:9px}
+  .unbind{display:block;margin:16px auto 0;border:0;background:transparent;color:#a59a8d;font-size:10px;text-decoration:underline;text-underline-offset:3px}
+  .plate2{position:absolute;right:5px;bottom:5px;width:24px;height:24px;border-radius:50%;border:3px solid #dcae9a;background:#fff8ef}
+  .cake{position:absolute;right:10px;bottom:9px;width:15px;height:13px;background:linear-gradient(160deg,#f6c5b6,#e99b8f);clip-path:polygon(0 100%,50% 0,100% 100%);z-index:2}
+  .steam{position:absolute;right:23px;bottom:33px;width:5px;height:13px;border-left:1.5px solid #e7c7b8;border-radius:50%;transform:rotate(8deg)}
+  .out-art{background:linear-gradient(#dcecf3,#edf3dc)!important}
+  .sun2{position:absolute;right:9px;top:5px;width:17px;height:17px;border-radius:50%;background:#f6d792}
+  .hill{position:absolute;bottom:-14px;border-radius:50%;background:#a9c29f}
+  .hill.h1{left:-20px;width:85px;height:48px}
+  .hill.h2{right:-20px;width:75px;height:42px;background:#b9cda9}
+  .tiny{position:absolute;width:25px;height:25px;border-radius:50%;object-fit:cover;border:1.5px solid #fff;z-index:3;bottom:4px}
+  .tiny.a{left:17px}.tiny.b{right:17px}
+  .sport-art{background:linear-gradient(#e4efdf,#dbe8f2)!important}
+  .court{position:absolute;left:7px;right:7px;bottom:8px;height:26px;border:1.5px solid rgba(255,255,255,.9);border-top:0;transform:skewX(-12deg)}
+  .shuttle2{position:absolute;right:12px;top:9px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:22px solid #fffaf0;filter:drop-shadow(0 1px 0 #a9b5aa)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="bar">
+    <button class="back">←</button>
+    <div class="brand"><h1>密友手帐</h1><small>BOND · WOWO</small></div>
+    <span class="bond">BOND</span>
+  </div>
+  <div class="content">
+    <div class="card">
+      <div class="friend-head">
+        <img src="../web/assets/friend-momo.png" alt="123">
+        <div><div class="name">123</div><div class="meta"><span class="live"></span>在房间里 · 心情 89</div></div>
+      </div>
+      <div class="code-row">
+        <div><small>我的好友码</small><b>W-62F4EF</b></div>
+        <button class="copy">复制</button>
+      </div>
+    </div>
+
+    <div class="section-title"><h2>正在进行</h2><span>TOGETHER NOW</span></div>
+    <div class="ticket">
+      <div class="ticket-left">
+        <div class="kicker">DOUBLE OUTING</div>
+        <h3>双人出游 · 游乐场</h3>
+        <p>和 123 一起，回来时会带一张合照。</p>
+        <div class="mini-art"><i></i></div>
+        <div class="ticket-foot"><button>看看她</button><button>提前结束</button></div>
+      </div>
+      <div class="ticket-stub">
+        <small>REMAIN</small>
+        <b>09:57</b>
+        
+      </div>
+    </div>
+
+    <div class="section-title"><h2>互动</h2><span>WITH FRIEND</span></div>
+    <div class="actions">
+      <div class="action feed"><div class="art feed-art"><img src="../web/assets/friend-momo.png"><span class="plate2"></span><span class="cake"></span><span class="steam"></span></div><div class="label">喂一口</div><div class="hint">偷偷塞过去</div></div>
+      <div class="action out"><div class="art out-art"><span class="sun2"></span><span class="hill h1"></span><span class="hill h2"></span><img class="tiny a" src="../web/assets/friend-wowo.png"><img class="tiny b" src="../web/assets/friend-momo.png"></div><div class="label">双人出游</div><div class="hint">30 分钟</div></div>
+      <div class="action sport"><div class="art sport-art"><span class="court"></span><span class="shuttle2"></span><img class="tiny a" src="../web/assets/friend-wowo.png"><img class="tiny b" src="../web/assets/friend-momo.png"></div><div class="label">双人运动</div><div class="hint">羽毛球</div></div>
+    </div>
+
+    <div class="pending"><span>123 发来一条双人运动邀请</span><button>查看</button></div>
+    <button class="unbind">解除密友绑定</button>
+  </div>
+</div>
+</body>
+</html>
