@@ -1,5 +1,5 @@
 /* WowoPet service worker — app shell only, API is always live. */
-const CACHE = "wowo-shell-v12";
+const CACHE = "wowo-shell-v13";
 const ASSETS = [
   "/",
   "/index.html",
@@ -9,6 +9,7 @@ const ASSETS = [
   "/css/theme.css",
   "/css/app.css",
   "/css/profile.css",
+  "/css/letters.css",
   "/js/app.js",
   "/js/api.js",
   "/js/shell.js",
@@ -16,6 +17,8 @@ const ASSETS = [
   "/js/util.js",
   "/js/profile.js",
   "/js/friend-page.js",
+  "/js/letters.js",
+  "/js/cloud-config.js",
   "/css/friend.css",
   "/shared/content.js",
   "/shared/engine.js",

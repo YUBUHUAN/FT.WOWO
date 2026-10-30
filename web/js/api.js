@@ -586,7 +586,70 @@ class CloudApi {
   }
 
   async friendUnbind() {
-    return cloudRpc("friend_unbind", { p_token: this.token });
+    const body = await cloudRpc("friend_unbind", { p_token: this.token });
+    if (!body || body.ok === false) {
+      const code = (body && (body.error || body.code)) || "friend_failed";
+      throw Object.assign(new Error(code), {
+        code,
+        status: 200,
+        body: body || null
+      });
+    }
+    return body;
+  }
+
+  async _letterRpc(name, args) {
+    const body = await cloudRpc(name, args);
+    if (!body || body.ok === false) {
+      const code = (body && (body.error || body.code)) || "letter_failed";
+      throw Object.assign(new Error(code), {
+        code,
+        status: 200,
+        body: body || null
+      });
+    }
+    return body;
+  }
+
+  async letterSend(style, body, paperStyle, envelopeStyle, sticker, replyTo, clientToken) {
+    if (!clientToken) throw Object.assign(new Error("bad_client_token"), { code: "bad_client_token", status: 400 });
+    return this._letterRpc("friend_letter_send", {
+      p_token: this.token,
+      p_style: style,
+      p_body: body,
+      p_paper_style: paperStyle,
+      p_envelope_style: envelopeStyle,
+      p_sticker: sticker || null,
+      p_reply_to: replyTo || null,
+      p_client_token: clientToken
+    });
+  }
+
+  async letterList(box = "inbox", limit = 20, before = null, beforeId = null) {
+    if (!!before !== !!beforeId) throw Object.assign(new Error("bad_cursor"), { code: "bad_cursor", status: 400 });
+    return this._letterRpc("friend_letter_list", {
+      p_token: this.token,
+      p_box: box || "inbox",
+      p_limit: limit == null ? 20 : limit,
+      p_before: before || null,
+      p_before_id: beforeId || null
+    });
+  }
+
+  async letterGet(id) {
+    return this._letterRpc("friend_letter_get", { p_token: this.token, p_id: id });
+  }
+
+  async letterRead(id) {
+    return this._letterRpc("friend_letter_read", { p_token: this.token, p_id: id });
+  }
+
+  async letterReact(id, kind) {
+    return this._letterRpc("friend_letter_react", { p_token: this.token, p_id: id, p_kind: kind });
+  }
+
+  async letterUnread() {
+    return this._letterRpc("friend_letter_unread", { p_token: this.token });
   }
 
   async friendFeed(foodId) {
