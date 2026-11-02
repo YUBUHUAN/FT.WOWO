@@ -138,6 +138,52 @@ class CloudBackend {
     return this.rpc("friend_event_ack", { p_token: token, p_id: id });
   }
 
+  async friendHistory(token, limit = 20) {
+    return this.rpc("friend_history", {
+      p_token: token,
+      p_limit: limit == null ? 20 : Number(limit)
+    });
+  }
+
+  async letterSend(token, style, body, paperStyle, envelopeStyle, sticker, replyTo, clientToken) {
+    return this.rpc("friend_letter_send", {
+      p_token: token,
+      p_style: style,
+      p_body: body,
+      p_paper_style: paperStyle,
+      p_envelope_style: envelopeStyle,
+      p_sticker: sticker || null,
+      p_reply_to: replyTo || null,
+      p_client_token: clientToken
+    });
+  }
+
+  async letterList(token, box = "inbox", limit = 20, before = null, beforeId = null) {
+    return this.rpc("friend_letter_list", {
+      p_token: token,
+      p_box: box || "inbox",
+      p_limit: limit == null ? 20 : Number(limit),
+      p_before: before || null,
+      p_before_id: beforeId || null
+    });
+  }
+
+  async letterGet(token, id) {
+    return this.rpc("friend_letter_get", { p_token: token, p_id: id });
+  }
+
+  async letterRead(token, id) {
+    return this.rpc("friend_letter_read", { p_token: token, p_id: id });
+  }
+
+  async letterReact(token, id, kind) {
+    return this.rpc("friend_letter_react", { p_token: token, p_id: id, p_kind: kind });
+  }
+
+  async letterUnread(token) {
+    return this.rpc("friend_letter_unread", { p_token: token });
+  }
+
   async saveState(token, state, baseRev) {
     return this.rpc("wowo_save_state", {
       p_token: token,
